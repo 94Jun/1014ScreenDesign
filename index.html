@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    #menu_list div{border:1px solid black; border-radius: 1em;}
+  </style>
+  <title>화면설계</title>
+</head>
+<body>
+  <h1>메뉴 리스트 입니다</h1>
+  <h2>식당이름</h2>
+  <p>메뉴카테고리대분류명 - 메뉴이름</p>
+  <button id="add_btn">추가</button>
+  <div id="menu_list">
+  </div>
+  <script>
+    const menuList = document.querySelector("#menu_list");
+    const addBtn = document.querySelector("#add_btn");
+
+    async function getMenu(){
+      const response = await fetch('공공데이터.json');
+      if(!response.ok){
+        console.log("데이터 연결 오류");
+        return 0
+      }
+      const data = await response.json();
+      console.log(data);
+      function addMenuItem(count){
+        for(let i=0+count; i<5+count; i++){
+          const container = document.createElement('div');
+          const resturant = document.createElement('h3');
+          const menu = document.createElement('p');
+          menu.innerHTML = `${data.body[i].MENU_CTGRY_LCLAS_NM} - ${data.body[i].MENU_NM}`
+          resturant.innerHTML = data.body[i].RSTR_NM;
+          container.append(resturant, menu);
+          menuList.append(container);
+        }
+      }
+      addMenuItem(0);
+      let count = 0;
+      addBtn.addEventListener("click", ()=>{
+        if(count < 1000){
+          count+=5;
+          addMenuItem(count);
+        }
+      })
+    }
+    getMenu();
+  </script>
+</body>
+</html>
